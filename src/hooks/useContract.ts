@@ -59,9 +59,10 @@ export function useENSRegistrarContract(withSignerIfPossible?: boolean): Contrac
   const { chainId } = useActiveWeb3React()
   let address: string | undefined
   if (chainId) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // @ts-ignore
     switch (chainId) {
       case ChainId.MAINNET:
-      case ChainId.GOERLI:
       case ChainId.ROPSTEN:
       case ChainId.RINKEBY:
         address = '0x00000000000C2E074eC69A0dFb2997BA6C7d2e1e'

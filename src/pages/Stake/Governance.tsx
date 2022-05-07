@@ -109,9 +109,9 @@ async function getBlockCountDown(targetBlock: number) {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      method: 'POST',
+      method: 'POST'
     })
 
     if (response.ok) {
@@ -136,9 +136,9 @@ async function getIncomingTransactions(senderAddress: string) {
     const response = await fetch(url, {
       headers: {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json'
       },
-      method: 'POST',
+      method: 'POST'
     })
 
     if (response.ok) {
@@ -200,10 +200,10 @@ export default function StakeGovernance() {
     if (yvrnPrice === 0) {
       const getPricePerFullShareMethod: (...args: any) => Promise<BigNumber> = govContract.getPricePerFullShare
       getPricePerFullShareMethod()
-        .then((response) => {
+        .then(response => {
           setYVrnPrice(hexStringToNumber(response.toHexString(), yVRN.decimals))
         })
-        .catch((e) => {
+        .catch(e => {
           setYVrnPrice(1)
           console.log(e)
         })
@@ -212,8 +212,8 @@ export default function StakeGovernance() {
     if (account) {
       const earlyWithdrawalFeeExpiryMethod: (...args: any) => Promise<BigNumber> = govContract.earlyWithdrawalFeeExpiry
       const args: Array<string> = [account]
-      earlyWithdrawalFeeExpiryMethod(...args).then((response) => {
-        getBlockCountDown(hexStringToNumber(response.toHexString(), 0)).then((countdown) => {
+      earlyWithdrawalFeeExpiryMethod(...args).then(response => {
+        getBlockCountDown(hexStringToNumber(response.toHexString(), 0)).then(countdown => {
           setFeeCountdown(now + Math.ceil(countdown))
           setFeeCountdownFetched(true)
         })
@@ -221,10 +221,10 @@ export default function StakeGovernance() {
     }
 
     if (receivedVRNManual === 0) {
-      getIncomingTransactions('0x0389d755C1833C9b350d4E8B619Eae16deFc1CbA').then((transactions) => {
+      getIncomingTransactions('0x0389d755C1833C9b350d4E8B619Eae16deFc1CbA').then(transactions => {
         let VRNManual = 0
         let daysSince = 0
-        transactions.forEach(function (transaction: Record<string, any>) {
+        transactions.forEach(function(transaction: Record<string, any>) {
           if (transaction.to === governanceAddress.toLowerCase()) {
             VRNManual += Number(transaction.value)
             if (daysSince === 0 || moment().diff(moment.unix(transaction.timeStamp), 'days') < daysSince) {
@@ -232,8 +232,8 @@ export default function StakeGovernance() {
             }
           }
         })
-        getIncomingTransactions('0x9dab4dfabc5eca084ffdd386a7b676f2b61bd871').then((transactions) => {
-          transactions.forEach(function (transaction: Record<string, any>) {
+        getIncomingTransactions('0x9dab4dfabc5eca084ffdd386a7b676f2b61bd871').then(transactions => {
+          transactions.forEach(function(transaction: Record<string, any>) {
             if (transaction.to === governanceAddress.toLowerCase()) {
               VRNManual += Number(transaction.value)
               if (daysSince === 0 || moment().diff(moment.unix(transaction.timeStamp), 'days') < daysSince) {
@@ -241,8 +241,8 @@ export default function StakeGovernance() {
               }
             }
           })
-          getIncomingTransactions('0x38f10aC1d8512fCCDF5C0201cEF1cBd76D9811B3').then((transactions) => {
-            transactions.forEach(function (transaction: Record<string, any>) {
+          getIncomingTransactions('0x38f10aC1d8512fCCDF5C0201cEF1cBd76D9811B3').then(transactions => {
+            transactions.forEach(function(transaction: Record<string, any>) {
               if (transaction.to === governanceAddress.toLowerCase()) {
                 VRNManual += Number(transaction.value)
                 if (daysSince === 0 || moment().diff(moment.unix(transaction.timeStamp), 'days') < daysSince) {
@@ -299,129 +299,18 @@ export default function StakeGovernance() {
         <AutoColumn gap={'12px'}>
           <RowBetween>
             <Title>{t('stakeGovernance')}</Title>
-            <Question text={t('stakeGovernanceDescription')} />
           </RowBetween>
         </AutoColumn>
-        <Text fontSize="12px" color={theme.textSecondary}>
-          {t('stakeGovernanceLastDistribution', { days: daysSinceLastDistribution })}
-        </Text>
-
-        {apy > 0.1 && (
-          <>
-            <BlueCard style={{ margin: '24px 0 12px' }}>
-              <Text textAlign="center" fontSize={12} fontWeight={400}>
-                {t('currentEstimatedAPY')}
-              </Text>
-              <Text textAlign="center" fontSize={30} fontWeight={700}>
-                {numberToPercent(apy)}
-              </Text>
-            </BlueCard>
-            <Text fontSize="12px" color={theme.textSecondary}>
-              {t('currentEstimatedAPYDisclaimer', { days: numberOfDaysForApy })}
-            </Text>
-          </>
-        )}
-        <GovernanceBalance>
-          <AutoColumn gap={'12px'} style={{ width: '100%' }}>
-            <RowBetween style={{ marginTop: '24px' }}>
-              <Title>{t('stakeGovernanceStatistics')}</Title>
-            </RowBetween>
-            <RowBetween>
-              <Text>{t('stakedCurrency', { currencySymbol: VRN.symbol })}:</Text>
-              {fetchingGovBalances ? (
-                <Loader />
-              ) : (
-                <BalanceText>
-                  {displayNumber(totalStaked) + ' ' + VRN.symbol}
-                  <br />
-                  {numberToUsd(Number(govBalances[VRN.address]?.toSignificant(8)) * vrnPrice)}
-                  <br />
-                  {t('stakeOfTotalSupply', { percent: numberToPercent(percentageStakedTVL) })}
-                </BalanceText>
-              )}
-            </RowBetween>
-            <RowBetween>
-              <Text>{t('currencyPrice', { currencySymbol: yVRN.symbol })}:</Text>
-              {yvrnPrice === 0 ? (
-                <Loader />
-              ) : (
-                <BalanceText>{numberToSignificant(yvrnPrice, 6) + ' ' + VRN.symbol}</BalanceText>
-              )}
-            </RowBetween>
-            {totalReceivedVRN > 1 && (
-              <RowBetween style={{ margin: '12px 0 0', alignItems: 'flex-start', lineHeight: '1.4' }}>
-                <Text> {t('stakeGovernanceTotalDistributed')}</Text>
-                <BalanceText>
-                  {`${numberToSignificant(totalReceivedVRN, 5)} ${VRN.symbol}`}
-                  <br />({numberToUsd(totalReceivedVRN * vrnPrice)})
-                </BalanceText>
-              </RowBetween>
-            )}
-            {totalApy > 0.1 && (
-              <>
-                <RowBetween>
-                  <Text textAlign="center">{t('currentEstimatedTotalAPY')}</Text>
-                  <BalanceText>{numberToPercent(totalApy)}</BalanceText>
-                </RowBetween>
-                <RowBetween>
-                  <Text fontSize="12px" color={theme.textSecondary}>
-                    {t('currentEstimatedTotalAPYDisclaimer', { days: daysSinceStart })}
-                  </Text>
-                </RowBetween>
-              </>
-            )}
-          </AutoColumn>
-        </GovernanceBalance>
 
         <UserBalance>
           <AutoColumn gap={'12px'} style={{ width: '100%' }}>
-            <RowBetween style={{ marginTop: '24px' }}>
-              <Title>{t('stakeGovernanceStake')}</Title>
-              <Question text={t('stakeGovernanceStakeDescription')} />
+            <RowBetween>
+              <Text>{t('stakeDisabled')}</Text>
             </RowBetween>
-            {account && (
-              <>
-                <RowBetween>
-                  <Text>{t('yourCurrencyBalance', { currencySymbol: VRN.symbol })}:</Text>
-                  {fetchingUserBalances ? (
-                    <Loader />
-                  ) : (
-                    <BalanceText>
-                      {userBalances[VRN.address]?.toSignificant(4) + ' ' + VRN.symbol}
-                      <br />({numberToUsd(Number(userBalances[VRN.address]?.toSignificant(8)) * vrnPrice)})
-                    </BalanceText>
-                  )}
-                </RowBetween>
-                <RowBetween>
-                  {hasVrn ? (
-                    <ButtonSecondary as={Link} width="100%" to="/stake/single/gov">
-                      {t('stake')}
-                    </ButtonSecondary>
-                  ) : (
-                    <ExternalButton href={`https://app.sushi.com/swap?outputCurrency=${VRN.address}`} target="_blank">
-                      {t('buyCurrency', { currency: VRN.symbol })}
-                    </ExternalButton>
-                  )}
-                </RowBetween>
-              </>
-            )}
           </AutoColumn>
         </UserBalance>
         {account ? (
           <>
-            {hasYVrn && (
-              <UserBalance>
-                <AutoColumn gap={'12px'} style={{ width: '100%' }}>
-                  <RowBetween style={{ marginTop: '24px' }}>
-                    <Title>{t('stakeGovernanceVoting')}</Title>
-                    <Question text={t('stakeGovernanceVotingDescription')} />
-                  </RowBetween>
-                  <RowBetween>
-                    <VotingButton href="https://snapshot.varen.finance">{t('stakeGovernanceVoting')}</VotingButton>
-                  </RowBetween>
-                </AutoColumn>
-              </UserBalance>
-            )}
             <UserBalance>
               <AutoColumn gap={'12px'} style={{ width: '100%' }}>
                 <RowBetween style={{ marginTop: '24px' }}>

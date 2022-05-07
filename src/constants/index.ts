@@ -254,11 +254,12 @@ export const vBTC = new Token(
 export const VRN = new Token(ChainId.MAINNET, '0x72377f31e30a405282b522d588AEbbea202b4f23', 18, 'VRN', 'Varen')
 export const yVRN = new Token(ChainId.MAINNET, '0x80Ad276cce240A8C4ad05c589557482fFD729755', 18, 'yVRN', 'Staked Varen')
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const WETH_ONLY: ChainTokenList = {
   [ChainId.MAINNET]: [WETH[ChainId.MAINNET]],
   [ChainId.ROPSTEN]: [WETH[ChainId.ROPSTEN]],
   [ChainId.RINKEBY]: [WETH[ChainId.RINKEBY]],
-  [ChainId.GOERLI]: [WETH[ChainId.GOERLI]],
   [ChainId.KOVAN]: [WETH[ChainId.KOVAN]]
 }
 // used to construct intermediary pairs for trading

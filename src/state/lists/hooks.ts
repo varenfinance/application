@@ -30,11 +30,13 @@ export type TokenAddressMap = Readonly<{ [chainId in ChainId]: Readonly<{ [token
 /**
  * An empty result, useful as a default.
  */
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const EMPTY_LIST: TokenAddressMap = {
   [ChainId.KOVAN]: {},
   [ChainId.RINKEBY]: {},
   [ChainId.ROPSTEN]: {},
-  [ChainId.GOERLI]: {},
   [ChainId.MAINNET]: {}
 }
 

@@ -225,11 +225,12 @@ const NavLabel = styled.span`
   flex-wrap: nowrap;
   align-items: center;
 `
+// eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+// @ts-ignore
 const NETWORK_LABELS: { [chainId in ChainId]: string | null } = {
   [ChainId.MAINNET]: 'Ethereum Mainnet',
   [ChainId.RINKEBY]: 'Rinkeby',
   [ChainId.ROPSTEN]: 'Ropsten',
-  [ChainId.GOERLI]: 'Görli',
   [ChainId.KOVAN]: 'Kovan'
 }
 
