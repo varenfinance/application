@@ -5,10 +5,6 @@ import GoogleAnalyticsReporter from '../components/analytics/GoogleAnalyticsRepo
 import Header from '../components/Header'
 import Web3ReactManager from '../components/Web3ReactManager'
 import ThemeQueryParamReader from '../theme/ThemeQueryParamReader'
-import Swap from './Swap'
-import {
-  RedirectPathToSwapOnly
-} from './Swap/redirects'
 import Buy from './Buy'
 import Pool from './Pool'
 import PoolFinder from './PoolFinder'
@@ -16,11 +12,7 @@ import RemoveLiquidity from './RemoveLiquidity'
 
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import StakeOverview from './Stake'
-import {
-  RedirectToStake,
-  RedirectToStakeWithParam,
-  RedirectToUnstake
-} from './Stake/redirects'
+import { RedirectGovStake, RedirectToStake, RedirectToStakeWithParam } from './Stake/redirects'
 import Navigation from '../components/Navigation'
 import Popups from '../components/Popups'
 import StakeGovernance from './Stake/Governance'
@@ -127,8 +119,6 @@ export default function App() {
             <Web3ReactManager>
               <Switch>
                 <Route exact strict path="/buy" component={Buy} />
-                <Route exact strict path="/swap" component={RedirectPathToSwapOnly} />
-                <Route exact strict path="/migrate" component={Swap} />
                 <Route exact strict path="/find" component={PoolFinder} />
                 <Route exact strict path="/pool" component={Pool} />
                 <Route exact strict path="/remove/:tokens" component={RedirectOldRemoveLiquidityPathStructure} />
@@ -138,8 +128,7 @@ export default function App() {
                 <Route exact path="/stake/gov" component={StakeGovernance} />
                 <Route exact path="/stake/:param" component={RedirectToStakeWithParam} />
                 <Route exact path="/stake/:currencyIdA/:currencyIdB" component={RedirectToStake} />
-                <Route exact path="/unstake/:currencyIdA/:currencyIdB" component={RedirectToUnstake} />
-                <Route component={RedirectPathToSwapOnly} />
+                <Route component={RedirectGovStake} />
               </Switch>
             </Web3ReactManager>
           </BodyWrapper>

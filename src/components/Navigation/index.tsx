@@ -388,16 +388,10 @@ export default function Navigation() {
   const [oldPage, setOldPage] = useState('swap')
   const [showMenu, setShowMenu] = useState(false)
   const [showWallet, setShowWallet] = useState(true)
-  const [showSettings, setShowSettings] = useState(false)
-  const [showSwap, setShowSwap] = useState(false)
-  const [showLiquidity, setShowLiquidity] = useState(false)
   const [showStaking, setShowStaking] = useState(false)
-  const [showWyre, setShowWyre] = useState(false)
-  const [showBridges, setShowBridges] = useState(false)
   const [showVaren, setShowVaren] = useState(false)
   const [showThemes, setShowThemes] = useState(false)
   const [showLanguages, setShowLanguages] = useState(false)
-  const [expertMode] = useExpertModeManager()
   const [userBalances, fetchingUserBalances] = useTokenBalancesWithLoadingIndicator(account ?? undefined, [VRN, yVRN])
   const { t } = useTranslation()
   const history = useHistory()
@@ -413,22 +407,13 @@ export default function Navigation() {
   switch (currentActive) {
     case 'stake':
       if (!showStaking) {
-        setShowSwap(false)
-        setShowLiquidity(false)
         setShowStaking(true)
-        setShowWyre(false)
-        setShowBridges(false)
         setShowVaren(false)
       }
       break
     default:
-      if (!showSwap) {
-        setShowSwap(true)
-        setShowLiquidity(false)
+      if (showStaking) {
         setShowStaking(false)
-        setShowWyre(false)
-        setShowBridges(false)
-        setShowVaren(false)
       }
   }
 
@@ -530,24 +515,6 @@ export default function Navigation() {
                 </AutoColumn>
               )}
             </SubNavigationBody>
-          </NavigationElement>
-          <NavigationElement>
-            <NavTitle active={currentActive === 'swap'}>
-              <NavTitleLink
-                onClick={() => {
-                  goTo('/migrate')
-                  if (!showSwap) {
-                    setShowSwap(true)
-                    setShowStaking(false)
-                  }
-                }}
-              >
-                <NavigationIconWrapper>
-                  <SwapSVG />
-                </NavigationIconWrapper>
-                {t('migration')}
-              </NavTitleLink>
-            </NavTitle>
           </NavigationElement>
           <NavigationElement>
             <NavTitle active={currentActive === 'stake'}>

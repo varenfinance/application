@@ -31,6 +31,10 @@ export function RedirectToStakeWithParam(props: RouteComponentProps<{ param: str
   return <StakeOverview {...props} />
 }
 
+export function RedirectGovStake() {
+  return <Redirect to={`/stake/gov`} />
+}
+
 export function RedirectToUnstake(props: RouteComponentProps<{ currencyIdA: string; currencyIdB: string }>) {
   const {
     match: {
