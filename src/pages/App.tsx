@@ -12,7 +12,7 @@ import RemoveLiquidity from './RemoveLiquidity'
 
 import { RedirectOldRemoveLiquidityPathStructure } from './RemoveLiquidity/redirects'
 import StakeOverview from './Stake'
-import { RedirectGovStake, RedirectToStake, RedirectToStakeWithParam } from './Stake/redirects'
+import { RedirectGovStake, RedirectToStake, RedirectToStakeWithParam, RedirectToUnstake } from './Stake/redirects'
 import Navigation from '../components/Navigation'
 import Popups from '../components/Popups'
 import StakeGovernance from './Stake/Governance'
@@ -127,6 +127,7 @@ export default function App() {
                 <Route exact strict path="/unstake" component={StakeOverview} />
                 <Route exact path="/stake/gov" component={StakeGovernance} />
                 <Route exact path="/stake/:param" component={RedirectToStakeWithParam} />
+                <Route exact path="/unstake/:currencyIdA/:currencyIdB" component={RedirectToUnstake} />
                 <Route exact path="/stake/:currencyIdA/:currencyIdB" component={RedirectToStake} />
                 <Route component={RedirectGovStake} />
               </Switch>
